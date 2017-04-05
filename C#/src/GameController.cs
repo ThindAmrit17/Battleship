@@ -50,7 +50,7 @@ public static class GameController
 	public static Player ComputerPlayer {
 		get { return _ai; }
 	}
-
+/*
 	public GameController()
 	{
 		//bottom state will be quitting. If player exits main menu then the game is over
@@ -58,7 +58,7 @@ public static class GameController
 
 		//at the start the player is viewing the main menu
 		_state.Push(GameState.ViewingMainMenu);
-	}
+	}*/
 
 	/// <summary>
 	/// Starts a new game.
