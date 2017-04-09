@@ -46,7 +46,7 @@ public class Player : IEnumerable<Ship>
 
 		//for each ship add the ships name so the seagrid knows about them
 		foreach (ShipName name in Enum.GetValues(typeof(ShipName))) {
-			if (name != ShipName.None) {
+			if ((name != ShipName.None) && (!(_Ships.ContainsKey(name)))) {
 				_Ships.Add(name, new Ship(name));
 			}
 		}
