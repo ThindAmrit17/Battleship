@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using SwinGameSDK;
 /// <summary>
 /// This includes a number of utility methods for
 /// drawing and interacting with the Mouse.
@@ -58,11 +59,9 @@ static class UtilityFunctions
 		mouse = SwinGame.MousePosition();
 
 		//if the mouse is inline with the button horizontally
-		if (mouse.X >= x & mouse.X <= x + w)
-		{
+		if (mouse.X >= x & mouse.X <= x + w) {
 			//Check vertical position
-			if (mouse.Y >= y & mouse.Y <= y + h)
-			{
+			if (mouse.Y >= y & mouse.Y <= y + h) {
 				result = true;
 			}
 		}
@@ -124,12 +123,10 @@ static class UtilityFunctions
 		int colLeft = 0;
 
 		//Draw the grid
-		for (int row = 0; row <= 9; row++)
-		{
+		for (int row = 0; row <= 9; row++) {
 			rowTop = top + (cellGap + cellHeight) * row;
 
-			for (int col = 0; col <= 9; col++)
-			{
+			for (int col = 0; col <= 9; col++) {
 				colLeft = left + (cellGap + cellWidth) * col;
 
 				Color fillColor = default(Color);
@@ -137,8 +134,7 @@ static class UtilityFunctions
 
 				draw = true;
 
-				switch (grid.Item(row, col))
-				{
+				switch (grid.Item(row, col)) {
 					case TileView.Ship:
 						draw = false;
 						break;
@@ -156,7 +152,7 @@ static class UtilityFunctions
 							fillColor = LARGE_HIT;
 						break;
 					case TileView.Sea:
-					case TileView.Ship:
+					//case TileView.Ship:
 						if (small)
 							fillColor = SMALL_SEA;
 						else
@@ -164,19 +160,16 @@ static class UtilityFunctions
 						break;
 				}
 
-				if (draw)
-				{
+				if (draw) {
 					SwinGame.FillRectangle(fillColor, colLeft, rowTop, cellWidth, cellHeight);
-					if (!small)
-					{
+					if (!small) {
 						SwinGame.DrawRectangle(OUTLINE_COLOR, colLeft, rowTop, cellWidth, cellHeight);
 					}
 				}
 			}
 		}
 
-		if (!showShips)
-		{
+		if (!showShips) {
 			return;
 		}
 
@@ -185,33 +178,26 @@ static class UtilityFunctions
 		string shipName = null;
 
 		//Draw the ships
-		foreach (Ship s in thePlayer)
-		{
+		foreach (Ship s in thePlayer) {
 			if (s == null || !s.IsDeployed)
 				continue;
 			rowTop = top + (cellGap + cellHeight) * s.Row + SHIP_GAP;
 			colLeft = left + (cellGap + cellWidth) * s.Column + SHIP_GAP;
 
-			if (s.Direction == Direction.LeftRight)
-			{
+			if (s.Direction == Direction.LeftRight) {
 				shipName = "ShipLR" + s.Size;
 				shipHeight = cellHeight - (SHIP_GAP * 2);
 				shipWidth = (cellWidth + cellGap) * s.Size - (SHIP_GAP * 2) - cellGap;
-			}
-			else
-			{
+			} else {
 				//Up down
 				shipName = "ShipUD" + s.Size;
 				shipHeight = (cellHeight + cellGap) * s.Size - (SHIP_GAP * 2) - cellGap;
 				shipWidth = cellWidth - (SHIP_GAP * 2);
 			}
 
-			if (!small)
-			{
-				SwinGame.DrawBitmap(GameImage(shipName), colLeft, rowTop);
-			}
-			else
-			{
+			if (!small) {
+				SwinGame.DrawBitmap(GameResources.GameImage(shipName), colLeft, rowTop);
+			} else {
 				SwinGame.FillRectangle(SHIP_FILL_COLOR, colLeft, rowTop, shipWidth, shipHeight);
 				SwinGame.DrawRectangle(SHIP_OUTLINE_COLOR, colLeft, rowTop, shipWidth, shipHeight);
 			}
@@ -225,8 +211,7 @@ static class UtilityFunctions
 	/// </summary>
 	/// <value>The message to display</value>
 	/// <returns>The message to display</returns>
-	public static string Message
-	{
+	public static string Message {
 		get { return _message; }
 		set { _message = value; }
 	}
@@ -236,7 +221,7 @@ static class UtilityFunctions
 	/// </summary>
 	public static void DrawMessage()
 	{
-		SwinGame.DrawText(Message, MESSAGE_COLOR, GameFont("Courier"), FIELD_LEFT, MESSAGE_TOP);
+		SwinGame.DrawText(Message, MESSAGE_COLOR, GameResources.GameFont("Courier"), FIELD_LEFT, MESSAGE_TOP);
 	}
 
 	/// <summary>
@@ -245,27 +230,26 @@ static class UtilityFunctions
 
 	public static void DrawBackground()
 	{
-		switch (CurrentState)
-		{
+		switch (GameController.CurrentState) {
 			case GameState.ViewingMainMenu:
 			case GameState.ViewingGameMenu:
 			case GameState.AlteringSettings:
 			case GameState.ViewingHighScores:
-				SwinGame.DrawBitmap(GameImage("Menu"), 0, 0);
+				SwinGame.DrawBitmap(GameResources.GameImage("Menu"), 0, 0);
 				break;
 			case GameState.Discovering:
 			case GameState.EndingGame:
-				SwinGame.DrawBitmap(GameImage("Discovery"), 0, 0);
+				SwinGame.DrawBitmap(GameResources.GameImage("Discovery"), 0, 0);
 				break;
 			case GameState.Deploying:
-				SwinGame.DrawBitmap(GameImage("Deploy"), 0, 0);
+				SwinGame.DrawBitmap(GameResources.GameImage("Deploy"), 0, 0);
 				break;
 			default:
 				SwinGame.ClearScreen();
 				break;
 		}
 
-		SwinGame.DrawFramerate(675, 585, GameFont("CourierSmall"));
+		SwinGame.DrawFramerate(675, 585, GameResources.GameFont("CourierSmall"));
 	}
 
 	public static void AddExplosion(int row, int col)
@@ -285,7 +269,7 @@ static class UtilityFunctions
 		Sprite s = default(Sprite);
 		Bitmap imgObj = default(Bitmap);
 
-		imgObj = GameImage(image);
+		imgObj = GameResources.GameImage(image);
 		imgObj.SetCellDetails(40, 40, 3, 3, 7);
 
 		AnimationScript animation = default(AnimationScript);
@@ -302,17 +286,14 @@ static class UtilityFunctions
 	public static void UpdateAnimations()
 	{
 		List<Sprite> ended = new List<Sprite>();
-		foreach (Sprite s in _Animations)
-		{
+		foreach (Sprite s in _Animations) {
 			SwinGame.UpdateSprite(s);
-			if (s.animationHasEnded)
-			{
+			if (s.AnimationHasEnded) {
 				ended.Add(s);
 			}
 		}
 
-		foreach (Sprite s in ended)
-		{
+		foreach (Sprite s in ended) {
 			_Animations.Remove(s);
 			SwinGame.FreeSprite(s);
 		}
@@ -320,8 +301,7 @@ static class UtilityFunctions
 
 	public static void DrawAnimations()
 	{
-		foreach (Sprite s in _Animations)
-		{
+		foreach (Sprite s in _Animations) {
 			SwinGame.DrawSprite(s);
 		}
 	}
@@ -329,10 +309,9 @@ static class UtilityFunctions
 	public static void DrawAnimationSequence()
 	{
 		int i = 0;
-		for (i = 1; i <= ANIMATION_CELLS * FRAMES_PER_CELL; i++)
-		{
+		for (i = 1; i <= ANIMATION_CELLS * FRAMES_PER_CELL; i++) {
 			UpdateAnimations();
-			DrawScreen();
+			GameController.DrawScreen();
 		}
 	}
 }

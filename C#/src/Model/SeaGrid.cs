@@ -19,14 +19,19 @@ public class SeaGrid : ISeaGrid
 	private const int _WIDTH = 10;
 
 	private const int _HEIGHT = 10;
-	private Tile[,] _GameTiles = new Tile[Width, Height];
+	private Tile[,] _GameTiles = new Tile[_WIDTH, _HEIGHT];
 	private Dictionary<ShipName, Ship> _Ships;
 
 	private int _ShipsKilled = 0;
 	/// <summary>
 	/// The sea grid has changed and should be redrawn.
 	/// </summary>
-	public event EventHandler ISeaGridChanged;
+	public event EventHandler Changed;
+	event EventHandler ISeaGrid.Changed
+	{ 
+    	add { Changed += value; } 
+    	remove { Changed -= value; } 
+	}
 
 	/// <summary>
 	/// The width of the sea grid.
@@ -59,8 +64,8 @@ public class SeaGrid : ISeaGrid
 	/// <param name="x">x coordinate of the tile</param>
 	/// <param name="y">y coordiante of the tile</param>
 	/// <returns></returns>
-	public TileView Item {
-		get { return _GameTiles(x, y).View; }
+	public TileView Item(int x, int y) {
+		return _GameTiles[x, y].View;
 	}
 
 	/// <summary>
@@ -87,7 +92,7 @@ public class SeaGrid : ISeaGrid
 		int i = 0;
 		for (i = 0; i <= Width - 1; i++) {
 			for (int j = 0; j <= Height - 1; j++) {
-				_GameTiles(i, j) = new Tile(i, j, null);
+				_GameTiles[i, j] = new Tile(i, j, null);
 			}
 		}
 
@@ -103,7 +108,7 @@ public class SeaGrid : ISeaGrid
 	/// <param name="direction">the direction the ship is going</param>
 	public void MoveShip(int row, int col, ShipName ship, Direction direction)
 	{
-		Ship newShip = _Ships(ship);
+		Ship newShip = _Ships[ship];
 		newShip.Remove();
 		AddShip(row, col, direction, newShip);
 	}
@@ -124,7 +129,7 @@ public class SeaGrid : ISeaGrid
 			int dRow = 0;
 			int dCol = 0;
 
-			if (direction == direction.LeftRight) {
+			if (direction == Direction.LeftRight) {
 				dRow = 0;
 				dCol = 1;
 			} else {
@@ -139,7 +144,7 @@ public class SeaGrid : ISeaGrid
 					throw new InvalidOperationException("Ship can't fit on the board");
 				}
 
-				_GameTiles(currentRow, currentCol).Ship = newShip;
+				_GameTiles[currentRow, currentCol].Ship = newShip;
 
 				currentCol += dCol;
 				currentRow += dRow;
@@ -169,22 +174,22 @@ public class SeaGrid : ISeaGrid
 	{
 		try {
 			//tile is already hit
-			if (_GameTiles(row, col).Shot) {
+			if (_GameTiles[row, col].Shot) {
 				return new AttackResult(ResultOfAttack.ShotAlready, "have already attacked [" + col + "," + row + "]!", row, col);
 			}
 
-			_GameTiles(row, col).Shoot();
+			_GameTiles[row, col].Shoot();
 
 			//there is no ship on the tile
-			if (_GameTiles(row, col).Ship == null) {
+			if (_GameTiles[row, col].Ship == null) {
 				return new AttackResult(ResultOfAttack.Miss, "missed", row, col);
 			}
 
 			//all ship's tiles have been destroyed
-			if (_GameTiles(row, col).Ship.IsDestroyed) {
-				_GameTiles(row, col).Shot = true;
+			if (_GameTiles[row, col].Ship.IsDestroyed) {
+				_GameTiles[row, col].Shot = true;
 				_ShipsKilled += 1;
-				return new AttackResult(ResultOfAttack.Destroyed, _GameTiles(row, col).Ship, "destroyed the enemy's", row, col);
+				return new AttackResult(ResultOfAttack.Destroyed, _GameTiles[row, col].Ship, "destroyed the enemy's", row, col);
 			}
 
 			//else hit but not destroyed
