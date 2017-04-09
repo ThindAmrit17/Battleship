@@ -19,6 +19,8 @@ static class GameLogic
 
 		SwinGame.PlayMusic(GameResources.GameMusic("Background"));
 
+		GameController.New();
+
 		//Game Loop
 		do {
 			GameController.HandleUserInput();
