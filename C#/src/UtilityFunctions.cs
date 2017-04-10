@@ -1,9 +1,8 @@
-
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+//using System.Data;
 using System.Diagnostics;
 using SwinGameSDK;
 /// <summary>
@@ -134,10 +133,10 @@ static class UtilityFunctions
 
 				draw = true;
 
-				switch (grid.Item(row, col)) {
-					case TileView.Ship:
-						draw = false;
-						break;
+				switch (grid[row, col]) {
+					//case TileView.Ship:
+					//	draw = false;
+					//	break;
 					//If small Then fillColor = _SMALL_SHIP Else fillColor = _LARGE_SHIP
 					case TileView.Miss:
 						if (small)
@@ -152,7 +151,7 @@ static class UtilityFunctions
 							fillColor = LARGE_HIT;
 						break;
 					case TileView.Sea:
-					//case TileView.Ship:
+					case TileView.Ship:
 						if (small)
 							fillColor = SMALL_SEA;
 						else
@@ -315,10 +314,3 @@ static class UtilityFunctions
 		}
 	}
 }
-
-//=======================================================
-//Service provided by Telerik (www.telerik.com)
-//Conversion powered by NRefactory.
-//Twitter: @telerik
-//Facebook: facebook.com/telerik
-//=======================================================

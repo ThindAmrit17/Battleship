@@ -3,10 +3,9 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+//using System.Data;
 using System.Diagnostics;
 using SwinGameSDK;
-
 /// <summary>
 /// The AIPlayer is a type of player. It can readomly deploy ships, it also has the
 /// functionality to generate coordinates and shoot at tiles
@@ -62,7 +61,8 @@ public abstract class AIPlayer : Player
 		/// <returns>true if location 1 and location 2 are at the same spot</returns>
 		public static bool operator ==(Location @this, Location other)
 		{
-			return @this != null && other != null && @this.Row == other.Row && @this.Column == other.Column;
+			return !ReferenceEquals(@this, null) && !ReferenceEquals(other, null) && ReferenceEquals(@this.Row, other.Row) && ReferenceEquals(@this.Column, other.Column);
+//			return @this != null && other != null && @this.Row == other.Row && @this.Column == other.Column;
 		}
 
 		/// <summary>
@@ -73,7 +73,8 @@ public abstract class AIPlayer : Player
 		/// <returns>true if location 1 and location 2 are not at the same spot</returns>
 		public static bool operator !=(Location @this, Location other)
 		{
-			return @this == null || other == null || @this.Row != other.Row || @this.Column != other.Column;
+			return ReferenceEquals(@this, null) || ReferenceEquals(other, null) || !ReferenceEquals(@this.Row, other.Row) || !ReferenceEquals(@this.Column, other.Column);
+			//return @this == null || other == null || @this.Row != other.Row || @this.Column != other.Column;
 		}
 	}
 
