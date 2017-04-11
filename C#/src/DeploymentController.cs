@@ -165,7 +165,7 @@ static class DeploymentController
 	}
 
 	/// <summary>
-	/// Gets the ship that the mouse is currently over in the selection panel.
+	/// Gets the ship that the mouse is currently over in the selection panel
 	/// </summary>
 	/// <returns>The ship selected or none</returns>
 	private static ShipName GetShipMouseIsOver()
