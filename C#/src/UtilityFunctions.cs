@@ -1,3 +1,4 @@
+
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
@@ -10,6 +11,8 @@ using SwinGameSDK;
 /// drawing and interacting with the Mouse.
 /// </summary>
 static class UtilityFunctions
+///This class give color to the boxes as per the guidelines that ship is
+///being hit, missed or destroyed.
 {
 	public const int FIELD_TOP = 122;
 	public const int FIELD_LEFT = 349;
@@ -145,6 +148,7 @@ static class UtilityFunctions
 							fillColor = LARGE_MISS;
 						break;
 					case TileView.Hit:
+/// If small then fillcolor= small hit otherwise fillcolor as largehit
 						if (small)
 							fillColor = SMALL_HIT;
 						else
@@ -158,7 +162,7 @@ static class UtilityFunctions
 							draw = false;
 						break;
 				}
-
+/// Draw the rectangle if small otherwise show ships
 				if (draw) {
 					SwinGame.FillRectangle(fillColor, colLeft, rowTop, cellWidth, cellHeight);
 					if (!small) {
@@ -250,7 +254,7 @@ static class UtilityFunctions
 
 		SwinGame.DrawFramerate(675, 585, GameResources.GameFont("CourierSmall"));
 	}
-
+/// Add Explosion to the screen when ship gets destroyed
 	public static void AddExplosion(int row, int col)
 	{
 		AddAnimation(row, col, "Splash");
@@ -281,7 +285,7 @@ static class UtilityFunctions
 		s.StartAnimation("splash");
 		_Animations.Add(s);
 	}
-
+/// This class update the animations
 	public static void UpdateAnimations()
 	{
 		List<Sprite> ended = new List<Sprite>();
@@ -297,14 +301,14 @@ static class UtilityFunctions
 			SwinGame.FreeSprite(s);
 		}
 	}
-
+/// This class draw new animations
 	public static void DrawAnimations()
 	{
 		foreach (Sprite s in _Animations) {
 			SwinGame.DrawSprite(s);
 		}
 	}
-
+/// This class draw the animations in sequence by taking reference from UpdateAnimations class
 	public static void DrawAnimationSequence()
 	{
 		int i = 0;

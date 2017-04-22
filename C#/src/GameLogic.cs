@@ -1,4 +1,7 @@
-
+///<summary>
+/// This module file handles the graphics window, 
+///loads the resources and frees the resources and handles the game loop.
+///</summary>
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;

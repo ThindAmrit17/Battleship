@@ -6,10 +6,13 @@ using System.Collections.Generic;
 //using System.Data;
 using System.Diagnostics;
 using SwinGameSDK;
-
+///<summary>
+/// This file loads all the resources in the game such as Images, Sounds, 
+///fonts and after loading the resources, it also help in showing them on game screen. 
+///</summary>
 public static class GameResources
 {
-
+/// It loads all the game fonts
 	private static void LoadFonts()
 	{
 		NewFont("ArialLarge", "arial.ttf", 80);
@@ -17,7 +20,7 @@ public static class GameResources
 		NewFont("CourierSmall", "cour.ttf", 8);
 		NewFont("Menu", "ffaccess.ttf", 8);
 	}
-
+///this class load all the game images
 	private static void LoadImages()
 	{
 		//Backgrounds
@@ -44,7 +47,7 @@ public static class GameResources
 		NewImage("Splash", "splash.png");
 
 	}
-
+///this class load the game sounds
 	private static void LoadSounds()
 	{
 		NewSound("Error", "error.wav");
@@ -118,7 +121,7 @@ public static class GameResources
 
 	private static SoundEffect _StartSound;
 	/// <summary>
-	/// The Resources Class stores all of the Games Media Resources, such as Images, Fonts
+	/// This Resources Class stores all of the Games Media Resources, such as Images, Fonts
 	/// Sounds, Music.
 	/// </summary>
 
@@ -155,7 +158,7 @@ public static class GameResources
 		SwinGame.Delay(100);
 		EndLoadingScreen(width, height);
 	}
-
+/// This class load the resources and then show them on  the screen
 	private static void ShowLoadingScreen()
 	{
 		_Background = SwinGame.LoadBitmap(SwinGame.PathToResource("SplashBack.png", ResourceKind.BitmapResource));
@@ -172,7 +175,7 @@ public static class GameResources
 
 		PlaySwinGameIntro();
 	}
-
+///This class load the intro screen of the game
 	private static void PlaySwinGameIntro()
 	{
 		const int ANI_X = 143;
@@ -219,7 +222,7 @@ public static class GameResources
 		SwinGame.RefreshScreen();
 		SwinGame.ProcessEvents();
 	}
-
+/// This class is responsible for ending the loading screen
 	private static void EndLoadingScreen(int width, int height)
 	{
 		SwinGame.ProcessEvents();
@@ -234,17 +237,17 @@ public static class GameResources
 		Audio.FreeSoundEffect(_StartSound);
 		SwinGame.ChangeScreenSize(width, height);
 	}
-
+/// Load new font to the game
 	private static void NewFont(string fontName, string filename, int size)
 	{
 		_Fonts.Add(fontName, SwinGame.LoadFont(SwinGame.PathToResource(filename, ResourceKind.FontResource), size));
 	}
-
+/// Load new image to the game
 	private static void NewImage(string imageName, string filename)
 	{
 		_Images.Add(imageName, SwinGame.LoadBitmap(SwinGame.PathToResource(filename, ResourceKind.BitmapResource)));
 	}
-
+/// Load new color in the game
 	private static void NewTransparentColorImage(string imageName, string fileName, Color transColor)
 	{
 		_Images.Add(imageName, SwinGame.LoadBitmap(SwinGame.PathToResource(fileName, ResourceKind.BitmapResource), true, transColor));
@@ -254,7 +257,7 @@ public static class GameResources
 	{
 		NewTransparentColorImage(imageName, fileName, transColor);
 	}
-
+///Load new sound to the game
 	private static void NewSound(string soundName, string filename)
 	{
 		_Sounds.Add(soundName, Audio.LoadSoundEffect(SwinGame.PathToResource(filename, ResourceKind.SoundResource)));
