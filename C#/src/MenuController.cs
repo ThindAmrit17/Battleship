@@ -26,64 +26,70 @@ static class MenuController
 		new string[] {
 			"PLAY",
 			"SETUP",
-			"MUSIC",
 			"SCORES",
+			"OPTION",
 			"QUIT"
 		},
+		// Game Menu
 		new string[] {
 			"RETURN",
 			"SURRENDER",
 			"QUIT"
 		},
+		// Setup Menu
 		new string[] {
 			"EASY",
 			"MEDIUM",
 			"HARD"
 		},
+		 // DEPLOYING_MENU 
+        new string[] {
+            "BACK"
+        },
+
+		// OPTION_MENU 
 		new string[] {
-			"ON",
-			"OFF"
+			"FULLSCREEN",
+			"BORDERLESS"
 		}
+
 	};
-	
-	// menu stats
 	private const int MENU_TOP = 575;
 	private const int MENU_LEFT = 30;
 	private const int MENU_GAP = 0;
-	private const int BUTTON_WIDTH = 75;
+	private const int BUTTON_WIDTH = 90;
 	private const int BUTTON_HEIGHT = 15;
 	private const int BUTTON_SEP = BUTTON_WIDTH + MENU_GAP;
+
 	private const int TEXT_OFFSET = 0;
-	
 	private const int MAIN_MENU = 0;
 	private const int GAME_MENU = 1;
 	private const int SETUP_MENU = 2;
-	private const int MUSIC_MENU = 3;
-	
-	// values for main menu
+	public const int DEPLOYING_MENU = 3;
+	private const int OPTION_MENU = 4;
+
 	private const int MAIN_MENU_PLAY_BUTTON = 0;
 	private const int MAIN_MENU_SETUP_BUTTON = 1;
-	private const int MAIN_MENU_MUSIC_BUTTON = 2;
-	private const int MAIN_MENU_TOP_SCORES_BUTTON = 3;
+	private const int MAIN_MENU_TOP_SCORES_BUTTON = 2;
+	private const int MAIN_MENU_OPTION_BUTTON = 3;
 	private const int MAIN_MENU_QUIT_BUTTON = 4;
-	
-	// values for difficulty menu
+
 	private const int SETUP_MENU_EASY_BUTTON = 0;
 	private const int SETUP_MENU_MEDIUM_BUTTON = 1;
 	private const int SETUP_MENU_HARD_BUTTON = 2;
 	private const int SETUP_MENU_EXIT_BUTTON = 3;
-	
-	// values for music menu
-	private const int MUSIC_MENU_ON_BUTTON = 0;
-	private const int MUSIC_MENU_OFF_BUTTON = 1;
-	
-	// values for game menu
+
 	private const int GAME_MENU_RETURN_BUTTON = 0;
 	private const int GAME_MENU_SURRENDER_BUTTON = 1;
 	private const int GAME_MENU_QUIT_BUTTON = 2;
-	
-	private static readonly Color MENU_COLOR = SwinGame.RGBAColor(2, 167, 252, 255);
 
+	private const int OPTION_MENU_FULLSCREEN_BUTTON = 0;
+	private const int OPTION_MENU_BORDERLESS_BUTTON = 1;
+
+
+	 public const int DEPLOYING_MENU_BACK_BUTTON = 0;
+
+	private static readonly Color MENU_COLOR = SwinGame.RGBAColor(2, 167, 252, 255);
 	private static readonly Color HIGHLIGHT_COLOR = SwinGame.RGBAColor(1, 57, 86, 255);
 	
 	/// <summary>
@@ -95,7 +101,7 @@ static class MenuController
 	}
 
 	/// <summary>
-	/// Handles the processing of user input when the setup menu is showing
+	/// Handles the processing of user input when the main menu is showing
 	/// </summary>
 	public static void HandleSetupMenuInput()
 	{
@@ -106,20 +112,19 @@ static class MenuController
 			HandleMenuInput(MAIN_MENU, 0, 0);
 		}
 	}
-	
+
 	/// <summary>
-	/// Handles the processing of user input when the music menu is showing
+	/// Handles the processing of user input when selecting option
 	/// </summary>
-	public static void HandleMusicMenuInput()
+	public static void HandleOptionMenuInput()
 	{
 		bool handled = false;
-		handled = HandleMenuInput(MUSIC_MENU, 1, 1);
+		handled = HandleMenuInput(OPTION_MENU, 1, 3);
 
 		if (!handled) {
 			HandleMenuInput(MAIN_MENU, 0, 0);
 		}
 	}
-
 	/// <summary>
 	/// Handle input in the game menu.
 	/// </summary>
@@ -130,6 +135,17 @@ static class MenuController
 	{
 		HandleMenuInput(GAME_MENU, 0, 0);
 	}
+
+  	/// <summary>
+    /// Handle input in the deploying menu.
+    /// </summary>
+    /// <remarks>
+    /// Just 1 item.  A 'BACK' button to go directly to main menu 
+    /// </remarks>
+    public static void HandleDeployingMenuInput()
+    {
+        HandleMenuInput(DEPLOYING_MENU, 0, 0);
+    }
 
 	/// <summary>
 	/// Handles input for the specified menu.
@@ -200,18 +216,29 @@ static class MenuController
 		DrawButtons(MAIN_MENU);
 		DrawButtons(SETUP_MENU, 1, 1);
 	}
-	
+
 	/// <summary>
-	/// Draws the music settings menu to the screen.
+	/// Draws the option menu to the screen.
 	/// </summary>
 	/// <remarks>
 	/// Also shows the main menu
 	/// </remarks>
-	public static void DrawMusicSettings()
+	public static void DrawOption()
 	{
 		DrawButtons(MAIN_MENU);
-		DrawButtons(MUSIC_MENU, 1, 1);
+		DrawButtons(OPTION_MENU, 1, 3);
 	}
+
+ 	/// <summary>
+    /// Draws the deployment menu to the screen (right now, just 1 item, the BACK button) 
+    /// </summary>
+    /// <remarks>
+    /// Also shows the main menu
+    /// </remarks>
+    public static void DrawDeploymentMenu()
+    {
+        DrawButtons(DEPLOYING_MENU);
+    }
 
 	/// <summary>
 	/// Draw the buttons associated with a top level menu.
@@ -290,12 +317,15 @@ static class MenuController
 			case SETUP_MENU:
 				PerformSetupMenuAction(button);
 				break;
-			case MUSIC_MENU:
-				PerformMusicMenuAction(button);
-				break;
 			case GAME_MENU:
 				PerformGameMenuAction(button);
 				break;
+			case DEPLOYING_MENU:
+                PerformDeployingMenuAction(button);
+                break;
+			case OPTION_MENU:
+				PerformOptionMenuAction(button);
+			break;	
 		}
 	}
 
@@ -312,12 +342,13 @@ static class MenuController
 			case MAIN_MENU_SETUP_BUTTON:
 				GameController.AddNewState(GameState.AlteringSettings);
 				break;
-			case MAIN_MENU_MUSIC_BUTTON:
-				GameController.AddNewState(GameState.AlteringMusic);
-				break;
 			case MAIN_MENU_TOP_SCORES_BUTTON:
 				GameController.AddNewState(GameState.ViewingHighScores);
 				break;
+			case MAIN_MENU_OPTION_BUTTON:
+				GameController.AddNewState(GameState.AlteringOption);
+				break;
+
 			case MAIN_MENU_QUIT_BUTTON:
 				GameController.EndCurrentState();
 				break;
@@ -344,26 +375,6 @@ static class MenuController
 		//Always end state - handles exit button as well
 		GameController.EndCurrentState();
 	}
-	
-	/// <summary>
-	/// The music menu was clicked, perform the button's action.
-	/// </summary>
-	/// <param name="button">the button pressed</param>
-	private static void PerformMusicMenuAction(int button)
-	{		
-		switch (button) {
-			case MUSIC_MENU_ON_BUTTON:
-				Console.WriteLine("music on");
-				SwinGame.ResumeMusic();
-				break;
-			case MUSIC_MENU_OFF_BUTTON:
-				Console.WriteLine("music off");
-				SwinGame.PauseMusic();
-				break;
-		}
-		//Always end state - handles exit button as well
-		GameController.EndCurrentState();
-	}
 
 	/// <summary>
 	/// The game menu was clicked, perform the button's action.
@@ -385,5 +396,36 @@ static class MenuController
 				GameController.AddNewState(GameState.Quitting);
 				break;
 		}
+	}
+	/// <summary>
+    /// The ship select menu was clicked, perform the button's action.
+    /// </summary>
+    /// <param name="button">the button pressed</param>
+    public static void PerformDeployingMenuAction(int button)
+    {
+        switch (button)
+        {
+            case DEPLOYING_MENU_BACK_BUTTON:
+                GameController.EndCurrentState();
+                break;
+        }
+    }
+
+	/// <summary>
+	/// The option menu was clicked, perform the button's action.
+	/// </summary>
+	/// <param name="button">the button pressed</param>
+	public static void PerformOptionMenuAction(int button)
+	{
+		switch (button) {
+		case OPTION_MENU_FULLSCREEN_BUTTON:
+			SwinGame.ToggleFullScreen ();
+			break;
+		case OPTION_MENU_BORDERLESS_BUTTON:
+			SwinGame.ToggleWindowBorder ();
+			break;
+		}
+		//Always end state - handles exit button as well
+		GameController.EndCurrentState();
 	}
 }
