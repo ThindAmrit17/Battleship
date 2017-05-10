@@ -14,7 +14,7 @@ using SwinGameSDK;
 /// </summary>
 public static class GameController
 {
-
+	private static float _volume = 1f;
 	private static BattleShipsGame _theGame;
 	private static Player _human;
 
@@ -75,7 +75,11 @@ public static class GameController
 		_theGame = new BattleShipsGame();
 
 		//create the players
+
 		switch (_aiSetting) {
+			case AIOption.Easy:
+				_ai = new AIEasyPlayer(_theGame);
+				break;
 			case AIOption.Medium:
 				_ai = new AIMediumPlayer(_theGame);
 				break;
