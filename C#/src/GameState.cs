@@ -60,5 +60,10 @@ public enum GameState
 	/// <summary>
 	/// The player has quit. Show ending credits and terminate the game
 	/// </summary>
-	Quitting
+	Quitting,
+
+/// <summary>
+	///  Show Help screen of the game
+	/// </summary>
+	Help
 }
